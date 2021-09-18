@@ -23,7 +23,7 @@ int main()
 	a = b;
 	b = temp;
 
-	printf ("\r\nAfter swapping, value of a = %f\n", a);
+	printf ("\nAfter swapping, value of a = %f\n", a);
 	printf ("After swapping, value of b = %f\n", b);
 
 
