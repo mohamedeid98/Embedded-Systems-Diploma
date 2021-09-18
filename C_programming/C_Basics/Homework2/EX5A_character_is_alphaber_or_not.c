@@ -15,7 +15,7 @@ int main()
 	fflush(stdout);
 	scanf ("%c", &alpha);
 
-	if ((alpha >=97 && alpha <=122) || (alpha >=65 && alpha<=90))
+	if ((alpha >='a' && alpha <='z') || (alpha >='A' && alpha<='Z'))
 		printf ("%c is an alphabet", alpha);
 	else
 		printf ("%c is not an alphabet", alpha);
