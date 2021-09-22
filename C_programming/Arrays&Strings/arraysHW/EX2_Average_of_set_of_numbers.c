@@ -12,9 +12,17 @@ int main()
 	float arr[100], sum=0 ;
 	int i, n;
 
-	printf("Enter number of data: ");
+	printf("Enter number of data in range of (1 to 100): ");
 	fflush(stdout);
 	scanf("%d", &n);
+
+	while (n < 1 || n > 100)
+	{
+		printf("Error!!! number of data should be in range (1 to 100): ");
+		fflush(stdout);
+		scanf("%d", &n);
+	}
+
 
 	for (i = 0 ; i < n ; i++)
 	{
