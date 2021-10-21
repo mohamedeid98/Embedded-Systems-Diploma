@@ -4,6 +4,9 @@
  *  Created on: Oct 21, 2021
  *      Author: mohamed
  */
+
+#include <stdio.h>
+
 struct SStudent
 {
 	char name[10];
@@ -11,7 +14,6 @@ struct SStudent
 	float marks;
 };
 
-#include <stdio.h>
 
 int main()
 {
