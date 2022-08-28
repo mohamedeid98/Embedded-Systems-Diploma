@@ -15,7 +15,7 @@ void reset_handler(void)
 	unsigned char* p_dst = (unsigned char*)&_S_DATA;
 	for(i = 0 ; i < data_size ; i++)
 	{
-		*((unsigned char*) p_dst) = *((unsigned char*) p_scr);
+		*((unsigned char*) p_dst++) = *((unsigned char*) p_scr++);
 	}
 
 	uint32_t bss_size = (unsigned char*)&_E_BSS - (unsigned char*)&_S_BSS;
@@ -38,7 +38,7 @@ void BusFault(void)__attribute__((weak, alias("default_handler")));
 void UsageFault(void)__attribute__((weak, alias("default_handler")));
 
 
-uint32_t vectors[] = {
+uint32_t vectors[]__attribute__((section(".vectors"))) = {
 	(uint32_t) &_STACK_TOP,
 	(uint32_t) &reset_handler,
 	(uint32_t) &NMI_handler,
