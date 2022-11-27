@@ -1,0 +1,35 @@
+startup.o:
+         U _E_BSS
+         U _E_DATA
+         U _E_TEXT
+         U _S_BSS
+         U _S_DATA
+000000a4 W BusFault
+000000a4 T default_handler
+         U main
+000000a4 W MM_Fault_handler
+000000a4 W NMI_handler
+00000000 T reset_handler
+00000000 b stack_top
+000000a4 W UsageFault
+00000000 R vectors
+
+main.o:
+00000000 T main
+
+ARM_CortexM4.axf
+20000400 B _E_BSS
+20000000 T _E_DATA
+00000188 T _E_TEXT
+20000000 B _S_BSS
+20000000 T _S_DATA
+0000017c W BusFault
+0000017c T default_handler
+00000010 T main
+0000017c W MM_Fault_handler
+0000017c W NMI_handler
+000000d8 T reset_handler
+20000000 b stack_top
+0000017c W UsageFault
+00000000 T vectors
+
