@@ -6,6 +6,67 @@
 
 #include "SMS.h"
 
+const char *STUDENT_FORMAT = "%s %s %d %f %d %d %d %d %d\n";
+
+
+void add_student_file(data *pdata, char *filename)
+{
+	student *phead;
+	student temp;
+	student *new_student;
+
+	FILE *file = fopen(filename, "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, "\nError opening file\n");
+		exit (1);
+	}
+	while(fscanf(file, STUDENT_FORMAT, &temp.fname, &temp.lname, &temp.roll, &temp.GPA, &temp.cid[0], &temp.cid[1], &temp.cid[2], &temp.cid[3], &temp.cid[4]) != EOF)
+	{
+		phead = pdata->head;
+		while(phead && pdata->size != 0)
+		{
+			if(phead->roll == temp.roll)
+				break;
+			phead = phead->next;
+		}
+
+		if(phead)
+		{
+			printf("Error! roll number already taken\n");
+			//free(new_student);
+		}
+		else
+		{
+			new_student = (student*)malloc(sizeof(student));
+			*new_student = temp;
+			if(pdata->head == NULL)
+			{
+				pdata->head = new_student;
+				pdata->tail = new_student;
+			}
+			else
+			{
+				pdata->tail->next = new_student;
+				pdata->tail = new_student;
+			}
+			new_student->next = NULL;
+			pdata->size++;
+
+		}
+
+		//printf("%s %s\n", new_student->fname, new_student->lname);
+
+	}
+
+	fclose (file);
+
+
+}
+
+
+
+
 void show(data *pdata)
 {
 	int i = 1;

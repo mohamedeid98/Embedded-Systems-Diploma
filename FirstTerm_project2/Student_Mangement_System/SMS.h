@@ -29,7 +29,7 @@ typedef struct database
 	student *tail;
 }data;
 
-void add_student_file();
+void add_student_file(data *, char *);
 void add_student_manual(data *);
 void find_roll(data *);
 void find_fn(data *);
