@@ -24,7 +24,7 @@ $(Project_Name).elf: $(OBJ)
 	cp $(Project_Name).elf $(Project_Name).axf
 	
 $(Project_Name).bin: $(Project_Name).elf
-	$(CC)objcopy.exe -O $< $@
+	$(CC)objcopy.exe -O binary $< $@
 	
 	
 clean:
