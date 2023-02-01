@@ -14,6 +14,7 @@ void setup()
 
 int main()
 {
+    GPIO_INITIALIZATION();
     setup();
 
     while(1)
