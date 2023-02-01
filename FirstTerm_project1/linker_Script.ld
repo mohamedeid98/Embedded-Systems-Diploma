@@ -32,6 +32,13 @@ SECTIONS
         _E_BSS = .;
     } > sram
 
+    .comment : {
+        *(COMMON)
+        *(*fill*)
+        *(.comment)
+        
+    } > sram
+
     . = . + 0x1000;
     _STACK_TOP = .;
 }

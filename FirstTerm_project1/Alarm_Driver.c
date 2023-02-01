@@ -17,14 +17,14 @@ void setAlarm_signal()
 STATE_define(AL_ON)
 {
     AL_state_id = AL_ON;
-    Set_Alarm_actuator(1);
+    Set_Alarm_actuator(0);
     Delay(100000);
     AL_state = STATE(AL_OFF);
 }
 STATE_define(AL_OFF)
 {
     AL_state_id = AL_OFF;
-    Set_Alarm_actuator(0);
+    Set_Alarm_actuator(1);
     Delay(100000);
 
 }

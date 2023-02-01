@@ -45,6 +45,7 @@ void UsageFault(void)__attribute__((weak, alias("default_handler")));
 
 uint32_t vectors[]__attribute__((section(".vectors"))) = {
     (uint32_t) &_STACK_TOP,
+	(uint32_t) &reset_handler,
     (uint32_t) &NMI_handler,
     (uint32_t) &MM_Fault_handler,
     (uint32_t) &BusFault,

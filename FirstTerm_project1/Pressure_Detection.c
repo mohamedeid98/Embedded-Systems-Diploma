@@ -1,6 +1,5 @@
 #include "Pressure_Dtection.h"
 
-int PD_pressure_val = 0;
 int PD_threshold = 20;
 
 void (*PD_state)();
