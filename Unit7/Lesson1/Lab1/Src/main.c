@@ -108,6 +108,5 @@ int main(void)
 		}
 		wait_ms(5);
 
-
 	}
 }
