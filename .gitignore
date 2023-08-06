@@ -1,6 +1,10 @@
 Debug/
+.vs/
 .settings/
 .metadata/
 .cproject
 .project
 .vscode/
+.atsln
+.cproj
+.xml
