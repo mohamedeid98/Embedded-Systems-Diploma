@@ -8,17 +8,20 @@
 #include "MCAL/UART/uart.h"
 #include "HAL/LCD/lcd.h"
 
-int main(void)
-{
+int main(void) {
+
+	char Txstr[] = "UART ATmega32";
+	char RxStr[20];
+
 	LCD_INIT();
 	UART_Init();
-	LCD_Display_Character('M');
-	UART_Send('M');
+	UART_SendString(Txstr);
     /* Replace with your application code */
-    while (1) 
-    {
-		char x = UART_Receive();
-		LCD_Display_Character(x);
-    }
+
+    while (1) {
+    
+		UART_ReceiveString(RxStr);
+		LCD_display_String(RxStr);
+	}
 }
 

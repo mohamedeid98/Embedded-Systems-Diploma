@@ -29,9 +29,10 @@ uint8 UART_Receive(void);
 void UART_SendNumber32(uint32 num);
 uint32 UART_ReceiveNumber32(void);
 
-void UART_SendString(char *srt);
-char *UART_ReceiveString(void);
+void UART_SendString(char *TxStr);
+void UART_ReceiveString(char *RxStr);
 
+char* UART_Receive_String(void);
 
 
 

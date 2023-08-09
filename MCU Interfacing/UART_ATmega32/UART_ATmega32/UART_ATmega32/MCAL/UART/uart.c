@@ -11,9 +11,10 @@
 =============================================================================================*/
 
 #include "uart.h"
-
-
-
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 /*============================================================================================
 									Functions Implementation
 =============================================================================================*/
@@ -59,4 +60,57 @@ uint8 UART_Receive(void){
 	while(!(READ_BIT(UCSRA, RXC)));
 	
 	return UDR;
+}
+
+
+void UART_SendString(char *TxStr){
+	while(*TxStr){
+		UART_Send(*TxStr++);
+	}
+}
+
+void UART_ReceiveString(char *RxStr){
+	
+	char ch;
+	
+	while(1){
+		
+		ch = UART_Receive();
+		if(ch == '#'){
+			*RxStr = '\0';
+			break;
+		}
+		*RxStr++ = ch;
+	}
+}
+
+void UART_SendNumber32(uint32 num){
+	
+	char *Pnum = &num;
+	UART_Send(*Pnum++);
+	UART_Send(*Pnum++);
+	UART_Send(*Pnum++);
+	UART_Send(*Pnum);
+
+}
+
+uint32 UART_ReceiveNumber32(void){
+	uint32_t number;
+
+	char s1[9];
+	char s2[9];
+	char s3[9];
+	char s4[9];
+
+	sprintf(s1, "%d", (UART_Receive() - 48));
+	sprintf(s2, "%d", (UART_Receive() - 48));
+	sprintf(s3, "%d", (UART_Receive() - 48));
+	sprintf(s4, "%d", (UART_Receive() - 48));
+	strcat(s1, s2);
+	strcat(s1, s3);
+	strcat(s1, s4);
+	number = atoi(s1);
+	
+	return number; 
+
 }
