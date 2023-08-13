@@ -76,7 +76,7 @@ void UART_ReceiveString(char *RxStr){
 	while(1){
 		
 		ch = UART_Receive();
-		if(ch == '#'){
+		if(ch == '\r'){
 			*RxStr = '\0';
 			break;
 		}
@@ -113,4 +113,16 @@ uint32 UART_ReceiveNumber32(void){
 	
 	return number; 
 
+}
+
+
+uint32 UART_ReceivePeriodic(char *RxBuff){
+	
+	if(READ_BIT(UCSRA, RXC))
+	{
+		*RxBuff = UDR;
+		return 1;
+	}
+	return 0;
+	
 }

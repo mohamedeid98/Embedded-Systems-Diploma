@@ -57,5 +57,5 @@ void LCD_Display_Character( char data );
 void LCD_display_String( char* Str );
 void LCD_Intger_Number( uint32 Intger_Number );
 void LCD_Real_Number( double Intger_Number );
-
+extern void _delay_ms(uint32 time);
 #endif /* LCD_H_ */

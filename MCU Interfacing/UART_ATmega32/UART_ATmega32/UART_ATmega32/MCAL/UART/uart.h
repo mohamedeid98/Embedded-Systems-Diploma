@@ -16,7 +16,14 @@
 
 #include "../../Lib/ATmega32.h"
 
+/*============================================================================================
+									Generic Defines
+=============================================================================================*/
+#define TX_INTERRUPT_EN()					SET_BIT(UCSRB, TXCIE)
+#define RX_INTERRUPT_EN()					SET_BIT(UCSRB, RXCIE)
 
+#define TX_INTERRUPT_DISABLE()				CLEAR_BIT(UCSRB, TXCIE)
+#define RX_INTERRUPT_DISABLE()				CLEAR_BIT(UCSRB, RXCIE)
 
 /*============================================================================================
 									APIs
@@ -34,7 +41,7 @@ void UART_ReceiveString(char *RxStr);
 
 char* UART_Receive_String(void);
 
-
+uint32 UART_ReceivePeriodic(char *RxBuff);
 
 
 #endif /* UART_H_ */

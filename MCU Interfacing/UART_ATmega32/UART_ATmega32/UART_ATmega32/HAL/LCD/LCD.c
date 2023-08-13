@@ -114,7 +114,7 @@ void LCD_Send_Command( uint8 command )
 }
 
 void LCD_Display_Character( char data )
-{
+{/*
 	 static uint16_t count = 0;
      if( count == 16 )
      {
@@ -126,7 +126,7 @@ void LCD_Display_Character( char data )
 	     LCD_Send_Command(CLEAR_COMMAND);
 	     LCD_Send_Command(LCD_BEGIN_AT_FIRST_RAW);
 	     count = 0;
-     }       
+     }    */  
 	vWRITE_PIN(LCD_CTRL_PORT, RS, TRUE);			 // Configure the control pin RS data mode
 	vWRITE_PIN(LCD_CTRL_PORT, RW, FALSE);	         // Configure the control pin RW write mode
 
@@ -167,7 +167,7 @@ void LCD_Display_Character( char data )
 	vWRITE_PIN(LCD_CTRL_PORT, E, FALSE);			 // disable LCD E=0
 	_delay_ms(1);	
 	
-	count++;								 // delay for processing Th = 13ns
+	//count++;								 // delay for processing Th = 13ns
 }
 
 void LCD_display_String( char* Str )
