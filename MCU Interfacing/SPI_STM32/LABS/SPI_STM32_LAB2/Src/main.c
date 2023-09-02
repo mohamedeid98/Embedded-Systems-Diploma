@@ -5,10 +5,12 @@
 #include "../MCAL/Inc/uart.h"
 #include "../MCAL/Inc/spi.h"
 
-#define MCU_ACT_AS_MASTER
+//#define MCU_ACT_AS_MASTER
+#define MCU_ACT_AS_SLAVE
 
 void USART_IRQ_Callback(void)
 {
+#ifdef MCU_ACT_AS_MASTER
 	uint16_t ch;
 	MCAL_USART_Receive(USART1, &ch, disable);
 	MCAL_USART_Send(USART1, &ch, enable);
@@ -17,9 +19,23 @@ void USART_IRQ_Callback(void)
 	MCAL_SPI_Send(SPI1, &ch, Polling_Enable);
 	MCAL_SPI_Receive(SPI1, &ch, Polling_Enable);
 	MCAL_GPIO_WritePin (GPIOA, GPIO_PIN4, GPIO_PIN_SET);
-
+#endif
 }
 
+void SPI_IRQ_CallBack(IRQ_SRC irq_src)
+{
+	uint16_t ch;
+
+#ifdef MCU_ACT_AS_SLAVE
+	if(irq_src.RXNE)
+	{
+		MCAL_SPI_Receive(SPI1, &ch, Polling_Disable);
+		MCAL_USART_Send(USART1, &ch, enable);
+	}
+
+#endif
+
+}
 
 
 int main(void)
@@ -55,10 +71,6 @@ int main(void)
 	spiConfig.Mode = SPI_MODE_MASTER;
 	spiConfig.INT_Enable = SPI_INT_DISABLE;
 	spiConfig.P_CallBack = NULL;
-#endif
-
-
-	MCAL_SPI_Init(SPI1, &spiConfig);
 
 	GPIO_PinConfig_t pinConfig;
 
@@ -67,6 +79,18 @@ int main(void)
 	pinConfig.GPIO_OutputSpeed = GPIO_SPEED_10M;
 
 	MCAL_GPIO_Init(GPIOA, &pinConfig);
+#endif
+
+#ifdef MCU_ACT_AS_SLAVE
+	spiConfig.NSS_MODE = SPI_NSS_MODE_SLAVE_HW;
+	spiConfig.Mode = SPI_MODE_SLAVE;
+	spiConfig.INT_Enable = SPI_INT_EN_RXNEIE;
+	spiConfig.P_CallBack = SPI_IRQ_CallBack;
+
+
+#endif
+
+	MCAL_SPI_Init(SPI1, &spiConfig);
 
 	while(1)
 	{
