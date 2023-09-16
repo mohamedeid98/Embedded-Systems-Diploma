@@ -29,6 +29,8 @@ typedef struct
 	
 	uint8_t OC0_PIN_MODE;   // Specifies the output compare pin behavior.
 							// This parameter must be set based on @ref OC0_MODE_define
+							
+	uint8_t Duty_Cycle;    // Specifies the duty cycle. Can be a value from 0% to 100%.
 }PWM_CONFIG_t;
 
 
@@ -47,8 +49,6 @@ typedef struct
 
 // Bit 6, 3 – WGM01:0: Waveform Generation Mode
 
-#define MODE_NORMAL						(uint8_t)(0)
-#define MODE_CTC						(uint8_t)(8)  // Clear Timer on Compare Match (CTC) mode
 #define MODE_PWM_PHASE_CORRECT			(uint8_t)(1 << 6)
 #define MODE_PWM_FAST					(uint8_t)(0x48)
 
@@ -62,8 +62,6 @@ typedef struct
 	//	0    1    1					clkI/O/64 (From prescaler)
 	//	1    0    0					clkI/O/256 (From prescaler)
 	//	1    0    1					clkI/O/1024 (From prescaler)
-	//	1    1    0					External clock source on T0 pin. Clock on falling edge.
-	//	1    1    1					External clock source on T0 pin. Clock on rising edge.
 
 #define NO_CLK_SRC						(uint8_t)(0)
 #define CLK_PRESCALER_0					(uint8_t)(1)
@@ -71,18 +69,16 @@ typedef struct
 #define CLK_PRESCALER_64				(uint8_t)(3)
 #define CLK_PRESCALER_256				(uint8_t)(4)
 #define CLK_PRESCALER_1024				(uint8_t)(5)
-#define CLK_EXT_FALLING					(uint8_t)(6)
-#define CLK_EXT_RISING					(uint8_t)(7)
 
 
 // @ref OC0_MODE_define
 #define OC0_MODE_DISCONNECTED			(uint8_t)(0)
-//#define OC0_MODE_TOGGLE					(uint8_t)(1 << 4)
-#define OC0_MODE_CLEAR					(uint8_t)(2 << 4) /* - In MODE_PWM_FAST Clear OC0 on compare match, set OC0 at BOTTOM,
+//#define OC0_MODE_TOGGLE				(uint8_t)(1 << 4)
+#define OC0_MODE_NON_INVERTED			(uint8_t)(2 << 4) /* - In MODE_PWM_FAST Clear OC0 on compare match, set OC0 at BOTTOM,
 															   (non-inverting mode)
 															 - In MODE_PWM_PHASE_CORRECT Clear OC0 on compare match when up-counting. 															   Set OC0 on compare match when down counting. */
 
-#define OC0_MODE_SET					(uint8_t)(3 << 4) /* - In MODE_PWM_FAST Set OC0 on compare match, clear OC0 at BOTTOM,
+#define OC0_MODE_INVERTED				(uint8_t)(3 << 4) /* - In MODE_PWM_FAST Set OC0 on compare match, clear OC0 at BOTTOM,
 													           (inverting mode)
 															 - In MODE_PWM_PHASE_CORRECT Set OC0 on compare match when up-counting. 															   Clear OC0 on compare match when down counting. */
 
