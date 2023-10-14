@@ -1,0 +1,138 @@
+
+#include "../STM32F103C6_Drivers/HAL/Inc/keypad.h"
+#include "../STM32F103C6_Drivers/MCAL/Inc/rcc.h"
+#include "../STM32F103C6_Drivers/MCAL/Inc/uart.h"
+#include "../STM32F103C6_Drivers/HAL/Inc/lcd.h"
+#include "../STM32F103C6_Drivers/MCAL/Inc/timer2.h"
+#include "../STM32F103C6_Drivers/HAL/Inc/spi_eeprom.h"
+#include "../STM32F103C6_Drivers/HAL/Inc/7seg.h"
+#include "../STM32F103C6_Drivers/MCAL/Inc/i2c.h"
+
+
+uint8_t write_buffer[5] = {1, 2, 3, 4, 5};
+uint8_t read_buffer[5] = {0};
+
+
+void USART_IRQ_Callback(void)
+{
+	uint16_t ch;
+	MCAL_USART_Receive(USART1, &ch, polling_disable);
+	MCAL_USART_Send(USART1, &ch, polling_enable);
+
+}
+
+void Clock_Init()
+{
+	RCC_ClkInitTypedef_t RCC_CFG;
+
+	RCC_CFG.ClockSource 				= RCC_SYSCLKSRC_PLL;
+	RCC_CFG.AHB_Prescaler   			= AHB_PRESCALER_DIV1;
+	RCC_CFG.APB1_Prescaler  			= APB1_PRESCALER_DIV4;
+	RCC_CFG.APB2_Prescaler  			= APB2_PRESCALER_DIV16;
+	RCC_CFG.PLL_Config.PLL_Multiplier   = PLL_MUL16;
+	RCC_CFG.PLL_Config.PLL_Source 		= PLL_CLK_SRC_HSI;
+
+	MCAL_RCC_Init(&RCC_CFG);
+}
+
+
+int main(void)
+{
+	//int i;
+
+	RCC_GPIOA_CLK_EN();
+	RCC_GPIOB_CLK_EN();
+	MCAL_TIM2_Init();
+
+
+	LCD_Init();
+
+
+	LCD_print((uint8_t*)"Welcome to");
+	LCD_gotoxy(1, 2);
+	LCD_print((uint8_t*)"my new project");
+
+	LCD_gotoxy(1, 3);
+	LCD_print((uint8_t*)"Smart Car System");
+	LCD_gotoxy(1, 4);
+	LCD_print((uint8_t*)"Please Enter a mode");
+
+	MCAL_TIM2_Delay_mS(1000);
+	LCD_send_command(CLEAR_DISPLAY_SCREEN);
+
+
+	HAL_7SEG_Init();
+	HAL_Keypad_Init();
+
+	HAL_SPI_EEPROM_Init(SPI1);
+
+	HAL_SPI_EEPROM_Write(SPI1, 100, write_buffer, 5);
+	HAL_SPI_EEPROM_Read(SPI1, 100, read_buffer, 5);
+
+	for(int i = 0 ; i < 5 ; i++)
+	{
+		LCD_print_int_number((uint32_t)read_buffer[i]);
+	}
+
+
+
+
+
+	/************************** Slave Select pin (SS) Configuration ************************/
+
+	/* Configured as general output push pull */
+
+	GPIO_PinConfig_t pinconfig;
+
+	pinconfig.GPIO_PinMode		= GPIO_MODE_OUTPUT_PP;
+	pinconfig.GPIO_PinNumber	= GPIO_PIN15;
+	pinconfig.GPIO_OutputSpeed	= GPIO_SPEED_10M;
+
+	MCAL_GPIO_Init(GPIOA, &pinconfig);
+
+	MCAL_GPIO_WritePin(GPIOA, GPIO_PIN15, GPIO_PIN_SET);
+	/************************** SPIx Configuration ****************************************/
+	SPI_Config_t spi_config;
+
+	spi_config.Mode 				= SPI_MODE_MASTER;
+	spi_config.Communication_Mode	= SPI_COMM_MODE_FULL_DUPLEX;
+	spi_config.Frame_Size			= SPI_FRAME_SIZE_8bits;
+	spi_config.Frame_Format			= SPI_DFF_MSB;
+	spi_config.BaudRate_PreScaler	= SPI_BR_fPCLK_8;
+	spi_config.CLK_Polarity			= SPI_CPOL_IDLE_LOW;
+	spi_config.CLK_Phase			= SPI_CPHA_1ST_EDGE;
+	spi_config.NSS_MODE				= SPI_NSS_MODE_SW_SET;
+	spi_config.INT_Enable			= SPI_INT_DISABLE;
+	spi_config.P_CallBack			= NULL;
+
+	MCAL_SPI_Init(SPI1, &spi_config);
+
+
+
+
+
+	uint8_t ch;
+
+	while(1)
+	{
+
+		ch = HAL_Keypad_GetKey();
+
+		if(ch != '#' && ch != '*')
+		{
+			LCD_send_data(ch);
+			HAL_7SEG_Update(ch);
+
+			MCAL_GPIO_WritePin(GPIOA, GPIO_PIN15, GPIO_PIN_RESET);
+			MCAL_SPI_Send(SPI1, (ch-48), Polling_Enable);	 // Send write enable instruction.
+			//MCAL_TIM2_Delay_mS(5);
+			MCAL_GPIO_WritePin(GPIOA, GPIO_PIN15, GPIO_PIN_SET);
+
+		}
+
+		else if (ch == '*')
+			HAL_7SEG_Reset();
+
+
+	}
+}
