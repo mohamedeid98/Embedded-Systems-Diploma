@@ -34,9 +34,9 @@ void ADMIN_DefaultMessage()
 	LCD_print((uint8_t*)"Private Parking");
 
 	LCD_gotoxy(1, 3);
-	LCD_print((uint8_t*)"1- Add IDs");
+	LCD_print((uint8_t*)"SW1- Add IDs");
 	LCD_gotoxy(1, 4);
-	LCD_print((uint8_t*)"2- Delete IDs");
+	LCD_print((uint8_t*)"SW2- Delete IDs");
 }
 
 
@@ -94,7 +94,7 @@ void ADMIN_Check_Password()
 		MCAL_TIM2_Delay_mS(200);
 
 		LCD_print((uint8_t*)"Authorized!");
-		MCAL_TIM2_Delay_mS(1000);
+		MCAL_TIM2_Delay_mS(500);
 
 		P_func();
 	}
@@ -105,7 +105,7 @@ void ADMIN_Check_Password()
 		MCAL_TIM2_Delay_mS(200);
 
 		LCD_print((uint8_t*)"Error Wrong Password");
-		MCAL_TIM2_Delay_mS(1000);
+		MCAL_TIM2_Delay_mS(500);
 		ADMIN_DefaultMessage();
 	}
 
